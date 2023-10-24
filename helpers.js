@@ -1,5 +1,6 @@
 export async function getData(url) {
-  return await fetch(url).then(res => res.json())
+  const data = await fetch(url)
+  return await data.json()
 }
 
 export function filterData({ data, from_date, to_date }) {
