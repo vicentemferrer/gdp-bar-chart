@@ -1,24 +1,19 @@
+import * as d3 from 'd3'
+import { getData, filterData } from './helpers.js'
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const w = 900
+const h = 464
+const p = 30
 
-setupCounter(document.querySelector('#counter'))
+const url = 'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json'
+
+const svg = d3.select('svg').attr('width', w).attr('height', h)
+
+const { data, from_date, to_date } = filterData(await getData(url))
+
+const xScale = d3.scaleLinear().domain([new Date(from_date), new Date(to_date)]).range([p, w - p])
+const hScale = d3.scaleLinear().domain([d3.min(data, d => d[1]), d3.max(data, d => d[1])]).range([h - p, p])
+
+svg.selectAll('rect').data(data).enter().append('rect').attr('x', d => xScale(new Date(d[0])))
+  .attr('y', d => hScale(d[1])).attr('width', 2).attr('height', d => h - hScale(d[1]))
