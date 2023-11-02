@@ -129,8 +129,6 @@ d3.json(
       .style('fill', '#33adff')
       .attr('transform', 'translate(60, 0)')
       .on('mouseover', function (event, d) {
-        d or datum is the height of the
-        current rect
         var i = this.getAttribute('index');
 
         overlay
